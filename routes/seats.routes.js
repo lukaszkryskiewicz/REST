@@ -26,8 +26,13 @@ router.route('/seats/:id').get((req, res) => {
 router.route('/seats').post((req, res) => {
   const { day, seat, client, email } = req.body
   if (day, seat, client, email) {
-    db.seats.push({ id: uuidv4(), day, seat, client, email })
-    res.json({ message: 'ok' })
+    const selectedDay = db.seats.filter(item => item.day === parseInt(day))
+    if (selectedDay.find(item => item.seat === parseInt(seat))) {
+      res.status(400).json({ message: 'The slot is already taken...' })
+    } else {
+      db.seats.push({ id: uuidv4(), day: parseInt(day), seat: parseInt(seat), client, email })
+      res.json({ message: 'ok' })
+    }
   } else {
     res.json({ message: "Fill all the required information!" })
   }
