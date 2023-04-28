@@ -9,7 +9,6 @@ import SeatChooser from './../SeatChooser/SeatChooser';
 const OrderTicketForm = () => {
   const dispatch = useDispatch();
   const requests = useSelector(getRequests);
-  console.log(requests);
 
   const [order, setOrder] = useState({
     client: '',
