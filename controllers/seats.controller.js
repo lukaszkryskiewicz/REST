@@ -33,7 +33,7 @@ exports.postSeat = async (req, res) => {
       } else {
         const newSeat = new Seat({ day: parseInt(day), seat: parseInt(seat), client: client, email: email });
         await newSeat.save();
-        req.io.emit('seatsUpdated', Seat.find({}))
+        req.io.emit('seatsUpdated', await Seat.find({}))
         res.json({ message: 'OK' });
       }
     }
