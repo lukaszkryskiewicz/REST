@@ -2,12 +2,21 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors')
 const socket = require('socket.io');
+const mongoose = require('mongoose');
 
 const app = express();
 app.use((req, res, next) => {
   req.io = io;
   next();
 });
+
+mongoose.connect('mongodb://localhost:27017/NewWaveDB', { useNewUrlParser: true });
+const db = mongoose.connection;
+
+db.once('open', () => {
+  console.log('Connected to the database');
+});
+db.on('error', err => console.log('Error ' + err));
 
 //import router
 const testimonialsRoutes = require('./routes/testimonials.routes')
