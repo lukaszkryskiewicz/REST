@@ -15,8 +15,7 @@ let dbUrl = '';
 
 if (NODE_ENV === 'production') dbUrl = 'url to remote db';
 else if (NODE_ENV === 'test') dbUrl = 'mongodb://localhost:27017/NewWaveDBTest';
-else dbUrl = 'mongodb://localhost:27017/NewWaveDBTest';
-//else dbUrl = 'mongodb+srv://user1:haslouser1@clusterticketapp.yziixc3.mongodb.net/NewWaveDB';
+else dbUrl = 'mongodb+srv://user1:haslouser1@clusterticketapp.yziixc3.mongodb.net/NewWaveDB';
 
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
@@ -30,6 +29,7 @@ db.on('error', err => console.log('Error ' + err));
 const testimonialsRoutes = require('./routes/testimonials.routes')
 const concertsRoutes = require('./routes/concerts.routes')
 const seatsRoutes = require('./routes/seats.routes')
+const workshopRoutes = require('./routes/workshops.routes')
 
 
 app.use(express.urlencoded({ extended: false }));
@@ -39,6 +39,7 @@ app.use(express.static(path.join(__dirname, '/client/build')));
 app.use('/api', testimonialsRoutes);
 app.use('/api', concertsRoutes);
 app.use('/api', seatsRoutes);
+app.use('/api', workshopRoutes);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/client/build/index.html'));

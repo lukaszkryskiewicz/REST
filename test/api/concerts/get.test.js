@@ -26,13 +26,16 @@ describe('GET /api/concerts', () => {
     }
   });
 
-  it('/concerts/should return all concerts with freeTickets parameter', async () => {
+  it('/concerts/should return all concerts with freeTickets and workshops parameter', async () => {
     const res = await request(server).get('/api/concerts/');
     expect(res.status).to.be.equal(200);
     expect(res.body).to.be.an('array');
     expect(res.body.length).to.be.equal(5);
     res.body.forEach((concert) => {
       expect(concert).to.have.property('freeSeats');
+    });
+    res.body.forEach((concert) => {
+      expect(concert).to.have.property('workshop');
     });
   });
 
