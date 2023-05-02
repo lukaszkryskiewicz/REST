@@ -71,3 +71,39 @@ exports.deleteConcert = async (req, res) => {
   }
 
 };
+
+exports.getConcertByPerformer = async (req, res) => {
+  try {
+    res.json(await Concert.find({ performer: req.params.performer }));
+  }
+  catch (err) {
+    res.status(500).json({ message: err });
+  }
+};
+
+exports.getConcertByGenre = async (req, res) => {
+  try {
+    res.json(await Concert.find({ genre: req.params.genre }));
+  }
+  catch (err) {
+    res.status(500).json({ message: err });
+  }
+};
+
+exports.getConcertByPrice = async (req, res) => {
+  try {
+    res.json(await Concert.find({ price: { $gt: req.params.price_min, $lt: req.params.price_max } }));
+  }
+  catch (err) {
+    res.status(500).json({ message: err });
+  }
+};
+
+exports.getConcertByDay = async (req, res) => {
+  try {
+    res.json(await Concert.find({ day: req.params.day }));
+  }
+  catch (err) {
+    res.status(500).json({ message: err });
+  }
+};

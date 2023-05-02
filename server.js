@@ -10,7 +10,15 @@ app.use((req, res, next) => {
   next();
 });
 
-mongoose.connect('mongodb+srv://user1:haslouser1@clusterticketapp.yziixc3.mongodb.net/NewWaveDB', { useNewUrlParser: true });
+const NODE_ENV = process.env.NODE_ENV;
+let dbUrl = '';
+
+if (NODE_ENV === 'production') dbUrl = 'url to remote db';
+else if (NODE_ENV === 'test') dbUrl = 'mongodb://localhost:27017/NewWaveDBTest';
+else dbUrl = 'mongodb://localhost:27017/NewWaveDBTest';
+//else dbUrl = 'mongodb+srv://user1:haslouser1@clusterticketapp.yziixc3.mongodb.net/NewWaveDB';
+
+mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
 db.once('open', () => {
@@ -53,3 +61,5 @@ io.on('connection', (socket) => {
 server.prependListener("request", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
 });
+
+module.exports = server;
