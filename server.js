@@ -3,6 +3,7 @@ const path = require('path');
 const cors = require('cors')
 const socket = require('socket.io');
 const mongoose = require('mongoose');
+const helmet = require('helmet')
 
 const app = express();
 app.use((req, res, next) => {
@@ -10,12 +11,10 @@ app.use((req, res, next) => {
   next();
 });
 
-const NODE_ENV = process.env.NODE_ENV;
-let dbUrl = '';
+const dbUrl = process.env.NODE_ENV === 'production' ?
+  `mongodb+srv://user1:${process.env.DB_PASS}@clusterticketapp.yziixc3.mongodb.net/NewWaveDB` :
+  'mongodb://localhost:27017/NewWaveDBTest';
 
-if (NODE_ENV === 'production') dbUrl = 'url to remote db';
-else if (NODE_ENV === 'test') dbUrl = 'mongodb://localhost:27017/NewWaveDBTest';
-else dbUrl = 'mongodb+srv://user1:haslouser1@clusterticketapp.yziixc3.mongodb.net/NewWaveDB';
 
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
@@ -36,6 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, '/client/build')));
+app.use(helmet());
 app.use('/api', testimonialsRoutes);
 app.use('/api', concertsRoutes);
 app.use('/api', seatsRoutes);

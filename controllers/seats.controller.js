@@ -1,4 +1,5 @@
 const Seat = require('../models/seat.model');
+const sanitize = require('mongo-sanitize')
 
 
 exports.getAll = async (req, res) => {
@@ -25,13 +26,15 @@ exports.getById = async (req, res) => {
 
 exports.postSeat = async (req, res) => {
   const { day, seat, client, email } = req.body
+  const sanitizedClient = sanitize(client);
+  const sanitizedEmail = sanitize(email);
   if (day && seat && client && email) {
     try {
       const checkedSeat = await Seat.findOne({ $and: [{ day: parseInt(day) }, { seat: parseInt(seat) }] });
       if (checkedSeat) {
         res.status(400).json({ message: 'The slot is already taken...' });
       } else {
-        const newSeat = new Seat({ day: parseInt(day), seat: parseInt(seat), client: client, email: email });
+        const newSeat = new Seat({ day: parseInt(day), seat: parseInt(seat), client: sanitizedClient, email: sanitizedEmail });
         await newSeat.save();
         req.io.emit('seatsUpdated', await Seat.find({}))
         res.json({ message: 'OK' });
