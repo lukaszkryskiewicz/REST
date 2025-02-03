@@ -24,9 +24,9 @@ app.use((req, res, next) => {
 });
 
 const dbUrl =
-  process.env.NODE_ENV === 'production' ?
-  `mongodb+srv://user1:${process.env.DB_PASS}@clusterticketapp.q90rx.mongodb.net/NewWaveDB`; :
-  'mongodb://localhost:27017/NewWaveDBTest';
+  process.env.NODE_ENV === 'production'
+    ? `mongodb+srv://user1:${process.env.DB_PASS}@clusterticketapp.q90rx.mongodb.net/NewWaveDB`
+    : 'mongodb://localhost:27017/NewWaveDBTest';
 
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
